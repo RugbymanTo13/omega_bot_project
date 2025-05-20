@@ -1,10 +1,11 @@
+
 import os
-import asyncio
 import logging
+import asyncio
 from flask import Flask, request
 from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
-from fetch_omega import get_omega_signal
+from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
+from updater import get_decision
 
 TOKEN = os.getenv("BOT_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
@@ -19,9 +20,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🤖 Omega∞ est en ligne et à votre service.")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("🔄 Patiente... Analyse IA en cours...")
-    signal = get_omega_signal()
-    await update.message.reply_text(signal)
+    text = update.message.text
+    decision = get_decision(text)
+    await update.message.reply_text(f"🔍 Analyse : {decision}")
 
 application.add_handler(CommandHandler("start", start))
 application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
@@ -45,4 +46,4 @@ async def main():
     await application.stop()
 
 if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(main())
+    asyncio.run(main())
