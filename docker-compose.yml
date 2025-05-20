@@ -1,0 +1,7 @@
+version: '3'
+services:
+  omega_bot:
+    build: .
+    env_file: .env
+    ports:
+      - "8080:8080"
