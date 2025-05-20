@@ -1,9 +1,9 @@
+from utils import process_message
 
-def get_decision(text):
-    # Exemple basique de décision automatisée
-    if "achat" in text.lower():
-        return "📈 Signal détecté : Achat"
-    elif "vente" in text.lower():
-        return "📉 Signal détecté : Vente"
-    else:
-        return "ℹ️ Aucun signal clair détecté."
+def get_decision(text: str) -> str:
+    processed = process_message(text)
+    if "buy" in processed:
+        return "Signal d'achat détecté 📈"
+    elif "sell" in processed:
+        return "Signal de vente détecté 📉"
+    return "Aucun signal détecté."

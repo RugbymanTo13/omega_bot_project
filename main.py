@@ -1,7 +1,6 @@
-
 import os
-import logging
 import asyncio
+import logging
 from flask import Flask, request
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
@@ -20,8 +19,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🤖 Omega∞ est en ligne et à votre service.")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = update.message.text
-    decision = get_decision(text)
+    decision = get_decision(update.message.text)
     await update.message.reply_text(f"🔍 Analyse : {decision}")
 
 application.add_handler(CommandHandler("start", start))
@@ -40,8 +38,8 @@ def webhook():
 async def main():
     await application.initialize()
     await application.bot.set_webhook(WEBHOOK_URL)
-    logger.info(f"🚀 Webhook configuré sur {WEBHOOK_URL}")
     await application.start()
+    logger.info(f"🚀 Webhook configuré sur {WEBHOOK_URL}")
     app.run(host="0.0.0.0", port=8080)
     await application.stop()
 
